@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_shopping/models/model_auth.dart';
 import 'package:simple_shopping/models/model_item_provider.dart';
+import 'package:simple_shopping/models/model_query.dart';
 import 'package:simple_shopping/screens/screen_detail.dart';
 import 'package:simple_shopping/screens/screen_index.dart';
 import 'package:simple_shopping/screens/screen_register.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => FirebaseAuthProvider()),
         ChangeNotifierProvider(create: (_) => ItemProvider()),
+        ChangeNotifierProvider(create: (_) => SearchQuery()),
       ],
       child: MaterialApp(
         title: 'Flutter Shopping Mall',
