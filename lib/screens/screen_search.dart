@@ -40,9 +40,40 @@ class SearchScreen extends StatelessWidget {
           )
         ],
       ),
-      body: const Center(
-        child: Text('Search?'),
-      ),
+      body: Column(children: [
+        Expanded(
+            child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 1.5,
+          ),
+          itemCount: itemProvider.searchItems.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GridTile(
+                child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/detail',
+                          arguments: itemProvider.searchItems[index]);
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.network(
+                                itemProvider.searchItems[index].imageUrl),
+                            Text(itemProvider.searchItems[index].title,
+                                style: const TextStyle(fontSize: 18)),
+                            Text(
+                              '${itemProvider.searchItems[index].price.toString()} won',
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.red),
+                            ),
+                          ],
+                        ))));
+          },
+        ))
+      ]),
     );
   }
 }
