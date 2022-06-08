@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:simple_shopping/models/model_auth.dart';
+import 'package:simple_shopping/models/model_cart.dart';
 import 'package:simple_shopping/models/model_item.dart';
+import 'package:provider/provider.dart';
 
 class DetailScreen extends StatelessWidget {
   const DetailScreen({Key? key}) : super(key: key);
@@ -7,6 +10,9 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context)!.settings.arguments as Item;
+    final cart = Provider.of<CartProvider>(context);
+    final authClient =
+        Provider.of<FirebaseAuthProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(item.title),
@@ -46,21 +52,25 @@ class DetailScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Column(
-                    children: const [
-                      Icon(
-                        Icons.add,
-                        color: Colors.blue,
+                cart.isItemInCart(item)
+                    ? const Icon(Icons.check, color: Colors.blue)
+                    : InkWell(
+                        onTap: () {
+                          cart.addItemToCart(authClient.user, item);
+                        },
+                        child: Column(
+                          children: const [
+                            Icon(
+                              Icons.add,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              'Add',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        'Add',
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),

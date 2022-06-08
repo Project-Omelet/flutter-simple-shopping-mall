@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:simple_shopping/models/model_auth.dart';
+import 'package:simple_shopping/models/model_cart.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return false;
     final authClient =
         Provider.of<FirebaseAuthProvider>(context, listen: false);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     bool isLogin = prefs.getBool('isLogin') ?? false;
     print("[+] Login status: ${isLogin.toString()}");
 
@@ -30,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await authClient.loginWithEmail(email!, password!).then((loginStatus) {
         if (loginStatus == AuthStatus.loginSuccess) {
           print("[+] 로그인 성공");
+          cartProvider.fetchCartItemsOrAddCart(authClient.user);
         } else {
           print("[-] 로그인 실패");
           isLogin = false;
